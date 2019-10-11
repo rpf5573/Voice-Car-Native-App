@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, ImageBackground, Text, TextInput, Button, TouchableOpacity, KeyboardAvoidingView, Alert} from 'react-native';
 import {NavigationScreenProps, NavigationParams} from "react-navigation";
-import {serverURL, rapiURL, ROUTES} from '../constants';
+import {serverURL, rapiURL, ROUTES, parts} from '../constants';
 import axios from "axios";
 import {AxiosRequestConfig} from "axios";
 
@@ -30,6 +30,10 @@ export default class EntranceScreen extends Component<NavigationScreenProps<Navi
         if (response.data.error) {
           Alert.alert(response.data.error);
           return;
+        }
+        response.data.speechTestMode = false;
+        if ( ! response.data.speechTestMode ) {
+          this.resetSimilarSpells();
         }
         let rcUsageState = parseInt(response.data.rcUsageState) ? true : false;
         this.setState({rcUsageState});
@@ -195,6 +199,20 @@ export default class EntranceScreen extends Component<NavigationScreenProps<Navi
         }, time);
       }
     }
+  }
+  resetSimilarSpells() {
+    parts.ARM.spells.forEach(spell => {
+      spell.similar = [];
+    });
+    parts.BOTTOM.spells.forEach(spell => {
+      spell.similar = [];
+    });
+    parts.HAND.spells.forEach(spell => {
+      spell.similar = [];
+    });
+    parts.WAIST.spells.forEach(spell => {
+      spell.similar = [];
+    });
   }
 }
 

@@ -38,14 +38,18 @@ export default class RemoteControllerScreen extends Component<NavigationScreenPr
     if ( this.part == parts.ARM ) {
       this.part.spells.forEach(part => {
         if ( this.elements[3].text == part.main ) {
-          this.elements[3].command = part.command;
+          this.elements[3].code = part.code;
+          this.elements[3].speed = part.speed;
         }
         else if ( this.elements[5].text == part.main ) {
-          this.elements[5].command = part.command;
+          this.elements[5].code = part.code;
+          this.elements[5].speed = part.speed;
         } else if ( this.elements[6].text == part.main ) {
-          this.elements[6].command = part.command;
+          this.elements[6].code = part.code;
+          this.elements[6].speed = part.speed;
         } else if ( this.elements[8].text == part.main ) {
-          this.elements[8].command = part.command;
+          this.elements[8].code = part.code;
+          this.elements[8].speed = part.speed;
         }
       });
     }
@@ -53,41 +57,50 @@ export default class RemoteControllerScreen extends Component<NavigationScreenPr
       this.part.spells.forEach(part => {
         // 10 = 빠르게
         if ( this.elements[10].text == part.main ) {
-          this.elements[10].command = part.command;
+          this.elements[10].code = part.code;
+          this.elements[10].speed = part.speed;
         }
         // 12 = 왼쪽
         else if ( this.elements[12].text == part.main ) {
-          this.elements[12].command = part.command;
+          this.elements[12].code = part.code;
+          this.elements[12].speed = part.speed;
         }
         // 13 = 앞으로
         else if ( this.elements[13].text == part.main ) {
-          this.elements[13].command = part.command;
+          this.elements[13].code = part.code;
+          this.elements[13].speed = part.speed;
         }
         // 14 = 오른쪽
         else if ( this.elements[14].text == part.main ) {
-          this.elements[14].command = part.command;
+          this.elements[14].code = part.code;
+          this.elements[14].speed = part.speed;
         }
         // 16 = 뒤로
         else if ( this.elements[16].text == part.main ) {
-          this.elements[16].command = part.command;
+          this.elements[16].code = part.code;
+          this.elements[16].speed = part.speed;
         }
       });
     } else if ( this.part == parts.HAND ) {
       this.part.spells.forEach(part => {
         if ( this.elements[3].text == part.main ) {
-          this.elements[3].command = part.command;
+          this.elements[3].code = part.code;
+          this.elements[3].speed = part.speed;
         }
         else if ( this.elements[5].text == part.main ) {
-          this.elements[5].command = part.command;
+          this.elements[5].code = part.code;
+          this.elements[5].speed = part.speed;
         }
       });
     } else if ( this.part == parts.WAIST ) {
       this.part.spells.forEach(part => {
         if ( this.elements[12].text == part.main ) {
-          this.elements[12].command = part.command;
+          this.elements[12].code = part.code;
+          this.elements[12].speed = part.speed;
         }
         else if ( this.elements[14].text == part.main ) {
-          this.elements[14].command = part.command;
+          this.elements[14].code = part.code;
+          this.elements[14].speed = part.speed;
         }
       });
     }
@@ -95,8 +108,9 @@ export default class RemoteControllerScreen extends Component<NavigationScreenPr
   team: number = this.props.navigation.getParam("team");
   part: Part = this.props.navigation.getParam("part");
   elements: any[] = []
-  sendCommand = (btnNumber:number, command: string, isStop: boolean) => {
-    var url = `${rapiURL(this.team)}/${command}`;
+  sendCommand = (btnNumber:number, code: number, speed: number, isStop: boolean) => {
+    var url = `${rapiURL(this.team)}/${code}/${speed}`;
+    console.log("url", url);
     axios(url).then((response) => {
       if (response.status == 201) {
         if (response.data.error) {
@@ -123,23 +137,25 @@ export default class RemoteControllerScreen extends Component<NavigationScreenPr
         activeBtnNumber: undefined,
         sendingCommand: false
       });
-      // Alert.alert("ERROR", "알수없는 에러가 발생했습니다");
+      Alert.alert("ERROR", "포크봇이 켜져있는지 확인해주세요");
     });
   }
-  handleClickBtn = (btnNumber: number, command: string) => {
+  handleClickBtn = (btnNumber: number, code: number, speed: number) => {
+    console.log("code", code);
+    console.log("speed", speed);
     // 현재 명령을 보내고 있는지 체크
     if ( ! this.state.sendingCommand ) {
 
       // inactive상태의 버튼을 눌렀을때
       if ( this.state.activeBtnNumber != btnNumber ) {
-        this.sendCommand(btnNumber, command, false);
+        this.sendCommand(btnNumber, code, speed, false);
       }
 
       // active 상태의 버튼을 눌렀을때
       else {
-        var commandArray = command.split('/');
-        var stopCommand = `${commandArray[0]}/stop`;
-        this.sendCommand(btnNumber, stopCommand, true);
+        // code 에서 stop을 만들어야지!
+        let stopCode = Math.floor(code/10) * 10; // 41이 들어오면 40으로 바꿔버린다!
+        this.sendCommand(btnNumber, stopCode, speed, true);
       }
 
     }
@@ -153,7 +169,7 @@ export default class RemoteControllerScreen extends Component<NavigationScreenPr
       }
       items.push(
         <View style={styles.box} key={index}>
-          <Hexagon type={value.type} text={value.text} command={value.command} onPress={this.handleClickBtn} btnNumber={index+1} isActive={isActive}></Hexagon>
+          <Hexagon type={value.type} text={value.text} code={value.code} speed={value.speed} onPress={this.handleClickBtn} btnNumber={index+1} isActive={isActive}></Hexagon>
         </View>);
     }
     return items

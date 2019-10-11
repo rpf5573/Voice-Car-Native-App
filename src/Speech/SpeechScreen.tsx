@@ -8,12 +8,13 @@ import {
   TouchableWithoutFeedback,
   Alert
 } from "react-native";
-import {Locale, rapiURL} from '../constants';
+import {Locale, rapiURL, parts as _parts} from '../constants';
 import { NavigationScreenProps, NavigationParams } from "react-navigation";
 import Voice from "react-native-voice";
 import Spell from "./Spell";
 import axios from "axios";
 import { Part, Parts, Spell as SpellType } from "../@types/index";
+import RecordButton from './RecordButton';
 
 type States = {
   active: boolean;
@@ -33,8 +34,10 @@ export default class SpeechScreen extends Component<NavigationScreenProps<Naviga
     this.sendCommand = this.sendCommand.bind(this);
     this.getMatchedSpell = this.getMatchedSpell.bind(this);
   }
-  team: number = this.props.navigation.getParam("team");
-  part: Part = this.props.navigation.getParam("part");
+  // team: number = this.props.navigation.getParam("team");
+  // part: Part = this.props.navigation.getParam("part");
+  team: number = 1;
+  part: Part = _parts.BOTTOM;
   state = {
     active: false,
     error: "",
@@ -95,11 +98,12 @@ export default class SpeechScreen extends Component<NavigationScreenProps<Naviga
         </View>
         <View style={styles.bottom}>
           {btn}
+          <RecordButton style={styles.recordButton} part={this.part}></RecordButton>
         </View>
         <View style={styles.allStopBtnContainer}>
           <TouchableWithoutFeedback onPress={() => {
             this.stopRecognizing();
-            this.sendCommand(this.part.stop.command, () => {
+            this.sendCommand(this.part.stop.code, () => {
               this.setState({
                 active: false,
                 result: '',
@@ -114,15 +118,15 @@ export default class SpeechScreen extends Component<NavigationScreenProps<Naviga
   }
 
   // custom function
-  sendCommand(command: string|undefined, callback: () => void) {
+  sendCommand(code: number|undefined, callback: () => void) {
     callback();
-    let url: string = `${rapiURL(this.team)}/${command}`;
+    let url: string = `${rapiURL(this.team)}/${code}`;
     axios(url).then((response) => {
       if ( response.status == 201 ) {
       } else {
       }
     }).catch((err) => {
-      // Alert.alert("ERROR", "포크레인 서버로부터 응답이 없습니다");
+      Alert.alert("ERROR", "통신에러");
     });
   }
   getMatchedSpell(spell: string): { code?: number, command?: string } {
@@ -163,7 +167,7 @@ export default class SpeechScreen extends Component<NavigationScreenProps<Naviga
     if ( this.state.result == '' ) { return; }
 
     let result = this.getMatchedSpell(this.state.result);
-    this.sendCommand(result.command!, () => {
+    this.sendCommand(result.code!, () => {
       this.setState({
         active: false,
         matchedSpellCode: result.code!
@@ -187,7 +191,7 @@ export default class SpeechScreen extends Component<NavigationScreenProps<Naviga
       if ( this.state.result == '' ) { return; }
 
       let result = this.getMatchedSpell(this.state.result);
-      this.sendCommand(result.command!, () => {
+      this.sendCommand(result.code!, () => {
         this.setState({
           active: false,
           matchedSpellCode: result.code!
@@ -280,7 +284,12 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: 'row',
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    position: "relative"
+  },
+  recordButton: {
+    position: "absolute",
+    right: 0
   },
   allStopBtnContainer: {
     padding: 10,

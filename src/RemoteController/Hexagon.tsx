@@ -13,7 +13,6 @@ import Svg, {
 import { RemoteBtnType } from '../constants';
 import { HexagonBtnProps } from "../@types/index";
 
-type Props = {}
 type States = {}
 export default class Hexagon extends Component<HexagonBtnProps, States> {
   constructor(props: HexagonBtnProps) {
@@ -25,7 +24,7 @@ export default class Hexagon extends Component<HexagonBtnProps, States> {
     }
     if ( this.props.type == RemoteBtnType.Text ) {
       var opacity = '1.0';
-      if ( ! this.props.command ) {
+      if ( ! this.props.code ) {
         opacity = '0.3';
       }
       var strokeColor = "gold";
@@ -33,7 +32,7 @@ export default class Hexagon extends Component<HexagonBtnProps, States> {
         strokeColor = "blue";
       }
       return (
-        <Svg width="100%" height="100%" viewBox="0 0 120 100" onPress={() => { if ( this.props.command ) { this.props.onPress(this.props.btnNumber, this.props.command) } }}>
+        <Svg width="100%" height="100%" viewBox="0 0 120 100" onPress={() => { if ( this.props.code && this.props.speed ) { this.props.onPress(this.props.btnNumber, this.props.code, this.props.speed) } }}>
           <Path
             d="M 32.9,3 C 3,50.5 3,51.56 3,51.56 L 32.9,98 90.4,98 118,51.56 90.4,3 32.9,3 Z M 32.9,3"
             fill="none"

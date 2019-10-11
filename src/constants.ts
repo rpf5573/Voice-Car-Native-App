@@ -27,17 +27,19 @@ const parts: Parts = {
         main: '펴',
         similar: ['펴', '표', '피라고', '벽', '효'],
         code: 11,
+        speed: 45,
         command: 'motor-6/forward/45'
       },
       {
         main: '접어',
         similar: ['접어', '저붜', '자보', '저봐', '줘봐', '줘바', '접포', '초밥', '여보', '초보', '터보', '초봉', '서버', '더워', '저도', '초복'],
         code: 12,
+        speed: 45,
         command: 'motor-6/backward/45'
       },
     ],
     stop: {
-      code: 1000,
+      code: 10,
       command: 'motor-6/stop'
     },
   },
@@ -49,29 +51,33 @@ const parts: Parts = {
         main: '펴',
         similar: ['펴','표', '8', '피라고', '피라고', '표', '벽', '효', '벼'],
         code: 21,
-        command: 'motor-5/backward/45'
+        speed: 45,
+        command: 'motor-5/forward/45'
       },
       {
         main: '접어',
         similar: ['접어', '저붜', '자보', '저봐', '줘봐', '줘바', '접포', '초밥', '여보', '초보', '터보', '초봉', '서버', '더워'],
         code: 22,
-        command: 'motor-5/forward/45'
+        speed: 45,
+        command: 'motor-5/backward/45'
       },
       {
         main: '들어',
         similar: ['들어', '틀어', '드론', '트럭', '불어', '그럼', '뚫어'],
         code: 23,
+        speed: 45,
         command: 'motor-2/backward/45'
       },
       {
         main: '내려',
         similar: ['내려', '내려와', '매력', '노력', '매려', '노려', '느려', '재료', '의료'],
         code: 24,
+        speed: 45,
         command: 'motor-2/forward/45'
       },
     ],
     stop: {
-      code: 2000,
+      code: 20,
       command: 'arm/stop'
     },
   },
@@ -83,17 +89,19 @@ const parts: Parts = {
         main: '왼쪽',
         similar: ['왼쪽', '외쪽'],
         code: 31,
+        speed: 60,
         command: 'motor-1/forward/60'
       },
       {
         main: '오른쪽',
         similar: ['오른쪽', '어른쪽', '어느쪽'],
         code: 32,
+        speed: 60,
         command: 'motor-1/backward/60'
       }
     ],
     stop: {
-      code: 3000,
+      code: 30,
       command: 'motor-1/stop'
     },
   },
@@ -105,35 +113,40 @@ const parts: Parts = {
         main: '앞으로',
         similar: ['앞으로', '아프로', '아브로', '어그로', '바보'],
         code: 41,
+        speed: 99, // 99가 max다 !! 100은 아니되옵니다~
         command: 'bottom/forward/100'
       },
       {
         main: '뒤로',
         similar: ['뒤로', '기록', '귀로', '1호', '위로'],
         code: 42,
+        speed: 99,
         command: 'bottom/backward/100'
       },
       {
         main: '왼쪽',
         similar: ['왼쪽'],
         code: 43,
+        speed: 99,
         command: 'bottom/left/100'
       },
       {
         main: '오른쪽',
         similar: ['오른쪽', '어른쪽', '어느쪽'],
         code: 44,
+        speed: 99,
         command: 'bottom/right/100'
       },
       {
         main: '빠르게',
         similar: ['빠르게', '빠르개', '바르게', '바르개', '파르게', '파르개'],
         code: 45,
+        speed: 99,
         command: 'bottom/forward/100'
       },
     ],
     stop: {
-      code: 4000,
+      code: 40,
       command: 'bottom/stop'
     },
   }

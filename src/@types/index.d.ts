@@ -4,6 +4,7 @@ type Spell = {
   main: string,
   similar: string[],
   code: number,
+  speed: number,
   command?: string // 아직은 undefined
 }
 type SpellOnRemote = {
@@ -37,9 +38,10 @@ type HexagonBtnProps = {
   type: RemoteBtnType,
   btnNumber: number,
   text?: string,
-  command?: string,
+  code?: number,
+  speed? : number,
   isActive: boolean,
-  onPress: (btnNumber: number, command: string) => void
+  onPress: (btnNumber: number, code: number, speed: number) => void
 }
 
 export {
