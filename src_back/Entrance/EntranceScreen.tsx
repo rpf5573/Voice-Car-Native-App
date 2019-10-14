@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, ImageBackground, Text, TextInput, Button, TouchableOpacity, KeyboardAvoidingView, Alert, Platform} from 'react-native';
+import {StyleSheet, View, ImageBackground, Text, TextInput, Button, TouchableOpacity, KeyboardAvoidingView, Alert} from 'react-native';
 import { NavigationStackScreenProps } from 'react-navigation-stack';
 import {serverURL, rapiURL, ROUTES, parts} from '../constants';
 import axios from "axios";
 import {AxiosRequestConfig} from "axios";
 
-type Props = NavigationStackScreenProps<{team: number}>
+type Props = {
+  navigation: NavigationStackScreenProps<{team: number}>
+}
 type States = {
   password: string,
   submitBtnDisabled: boolean,
@@ -47,7 +49,7 @@ export default class EntranceScreen extends Component<Props, States> {
     });
   }
   moveToPartSelectScreen(team: number, rcUsageState: boolean) {
-    this.props.navigation.push(ROUTES.PartSelectScreen, { team, rcUsageState });
+    this.props.navigation.navigation.push(ROUTES.PartSelectScreen, { team, rcUsageState });
   }
   login(password: string) {
     if (password == "testmode1") {
@@ -84,7 +86,6 @@ export default class EntranceScreen extends Component<Props, States> {
         Alert.alert("ERROR", "통신 에러");
       }
     }).catch((err) => {
-      console.log(err);
       Alert.alert("ERROR", "알수없는 에러가 발생했습니다");
     });
   }
@@ -92,8 +93,7 @@ export default class EntranceScreen extends Component<Props, States> {
     if ( this.state.rcUsageState != null ) {
       return (
         <ImageBackground source={require("../images/background.jpeg")} style={styles.backgroundImage}>
-          <KeyboardAvoidingView
-          style={{ flex: 1 }}>
+          <KeyboardAvoidingView>
             <View style={styles.container}>
               <View style={styles.passwordContainer}>
                 <TextInput style={styles.passwordInput}

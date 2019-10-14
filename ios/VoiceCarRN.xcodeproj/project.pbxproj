@@ -17,13 +17,13 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* VoiceCarRNTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* VoiceCarRNTests.m */; };
-		5B621BAD23541F4B007C2DFA /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
-		5BB5D8562336929D0045CF58 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
+		5B621BAE23543803007C2DFA /* libPods-VoiceCarRN.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B237F25875492A6E272C5D65 /* libPods-VoiceCarRN.a */; };
+		5B621BAF23545918007C2DFA /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
+		5B621BB02354591F007C2DFA /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
 		5BB5D8572336962D0045CF58 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED297162215061F000B7C4FE /* JavaScriptCore.framework */; };
 		5BB5D858233697CB0045CF58 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED297162215061F000B7C4FE /* JavaScriptCore.framework */; };
 		8DCD97AEB5C278FA14E89688 /* libPods-VoiceCarRN-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E3A652625835E0E17715509 /* libPods-VoiceCarRN-tvOS.a */; };
 		B5117F27CC1789891939B1EC /* libPods-VoiceCarRNTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CCC62A6B1C0EED2E59C0B265 /* libPods-VoiceCarRNTests.a */; };
-		BA7215401696DA09B35FDB05 /* libPods-VoiceCarRN.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B237F25875492A6E272C5D65 /* libPods-VoiceCarRN.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,8 +87,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B621BAE23543803007C2DFA /* libPods-VoiceCarRN.a in Frameworks */,
 				5BB5D8572336962D0045CF58 /* JavaScriptCore.framework in Frameworks */,
-				BA7215401696DA09B35FDB05 /* libPods-VoiceCarRN.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -339,7 +339,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5BB5D8562336929D0045CF58 /* main.jsbundle in Resources */,
+				5B621BB02354591F007C2DFA /* main.jsbundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -347,7 +347,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B621BAD23541F4B007C2DFA /* main.jsbundle in Resources */,
+				5B621BAF23545918007C2DFA /* main.jsbundle in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);

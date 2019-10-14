@@ -5,7 +5,9 @@ import {parts, ROUTES} from '../constants';
 import PartBox from './PartBox';
 import {Part, Parts} from '../@types/index';
 
-type Props = NavigationStackScreenProps<{team: number, rcUsageState: number}>
+type Props = {
+  navigation: NavigationStackScreenProps<{team: number, rcUsageState: number}>
+}
 type States = {
   part: Part | null
 }
@@ -23,9 +25,9 @@ export default class PartSelectScreen extends Component<Props, States> {
     title: '몸체 설정'
   }
   moveToSpeechScreen(part: Part) {
-    let team: number = this.props.navigation.getParam('team');
+    let team: number = this.props.navigation.navigation.getParam('team');
     if ( team > 0 ) {
-      this.props.navigation.push(ROUTES.SpeechScreen, {
+      this.props.navigation.navigation.push(ROUTES.SpeechScreen, {
         part,
         team
       });
@@ -34,9 +36,9 @@ export default class PartSelectScreen extends Component<Props, States> {
     }
   }
   moveToRCScreen(part: Part) {
-    let team: number = this.props.navigation.getParam('team');
+    let team: number = this.props.navigation.navigation.getParam('team');
     if ( team > 0 ) {
-      this.props.navigation.push(ROUTES.RemoteControllerScreen, {
+      this.props.navigation.navigation.push(ROUTES.RemoteControllerScreen, {
         part,
         team
       });
@@ -45,7 +47,7 @@ export default class PartSelectScreen extends Component<Props, States> {
     }
   }
   renderPartBoxes(parts: Parts) {
-    let rcUsageState = this.props.navigation.getParam('rcUsageState');
+    let rcUsageState = this.props.navigation.navigation.getParam('rcUsageState');
     let moveToControllerScreen = rcUsageState ? this.moveToRCScreen : this.moveToSpeechScreen;
     let partBoxes = []
     partBoxes.push(<PartBox key="hand" moveToControllerScreen={moveToControllerScreen} part={parts.HAND} image={require('../images/hand.png')}></PartBox>);

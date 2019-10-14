@@ -16,7 +16,9 @@ import axios from "axios";
 import { Part, Parts, Spell as SpellType } from "../@types/index";
 import RecordButton from './RecordButton';
 
-type Props = NavigationStackScreenProps<{team: number, part: Part}>
+type Props = {
+  navigation: NavigationStackScreenProps<{team: number, part: Part}>
+}
 type States = {
   active: boolean;
   error: string;
@@ -35,8 +37,8 @@ export default class SpeechScreen extends Component<Props,States> {
     this.sendCommand = this.sendCommand.bind(this);
     this.getMatchedSpell = this.getMatchedSpell.bind(this);
   }
-  team: number = this.props.navigation.getParam("team");
-  part: Part = this.props.navigation.getParam("part");
+  team: number = this.props.navigation.navigation.getParam("team");
+  part: Part = this.props.navigation.navigation.getParam("part");
   state = {
     active: false,
     error: "",

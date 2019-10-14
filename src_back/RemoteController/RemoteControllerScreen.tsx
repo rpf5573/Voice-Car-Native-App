@@ -14,7 +14,9 @@ import axios from "axios";
 import { number } from 'prop-types';
 import { NavigationStackScreenProps } from 'react-navigation-stack';
 
-type Props = NavigationStackScreenProps<{team: number, part: Part}>
+type Props = {
+  navigation: NavigationStackScreenProps<{team: number, part: Part}>
+}
 type States = {
   activeBtnNumber: number|undefined,
   commandRightBefore: string|undefined,
@@ -106,8 +108,8 @@ export default class RemoteControllerScreen extends React.Component<Props, State
       });
     }
   }
-  team: number = this.props.navigation.getParam("team");
-  part: Part = this.props.navigation.getParam("part");
+  team: number = this.props.navigation.navigation.getParam("team");
+  part: Part = this.props.navigation.navigation.getParam("part");
   elements: any[] = []
   sendCommand = (btnNumber:number, code: number, speed: number, isStop: boolean) => {
     var url = `${rapiURL(this.team)}/${code}/${speed}`;
