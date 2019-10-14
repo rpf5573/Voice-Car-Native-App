@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, ImageBackground, Text, TextInput, Button, TouchableOpacity, KeyboardAvoidingView, Alert, Platform} from 'react-native';
+import {StyleSheet, View, ImageBackground, Text, TextInput, Button, TouchableOpacity, KeyboardAvoidingView, Alert, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import { NavigationStackScreenProps } from 'react-navigation-stack';
 import {serverURL, rapiURL, ROUTES, parts} from '../constants';
 import axios from "axios";
@@ -87,34 +87,6 @@ export default class EntranceScreen extends Component<Props, States> {
       console.log(err);
       Alert.alert("ERROR", "알수없는 에러가 발생했습니다");
     });
-  }
-  render() {
-    if ( this.state.rcUsageState != null ) {
-      return (
-        <ImageBackground source={require("../images/background.jpeg")} style={styles.backgroundImage}>
-          <KeyboardAvoidingView
-          style={{ flex: 1 }}>
-            <View style={styles.container}>
-              <View style={styles.passwordContainer}>
-                <TextInput style={styles.passwordInput}
-                  placeholder="비밀번호 입력"
-                  onChangeText={(text) => {this.setState({password: text})}}
-                  underlineColorAndroid='transparent'/>
-                <TouchableOpacity
-                  disabled={this.state.submitBtnDisabled}
-                  style={styles.passwordSubmitBtn}
-                  onPress={() => { this.login(this.state.password) }}>
-                  <Text>Log in</Text>
-                  </TouchableOpacity>
-              </View>
-            </View>
-          </KeyboardAvoidingView>
-        </ImageBackground>
-      );
-    }
-    else {
-      return (<View></View>)
-    }
   }
   testmode(t: number) {
     if (t == 1) {
@@ -217,17 +189,45 @@ export default class EntranceScreen extends Component<Props, States> {
       spell.similar = [];
     });
   }
+  render() {
+    if ( this.state.rcUsageState != null ) {
+      return (
+        <KeyboardAvoidingView behavior="padding" enabled>
+          <ImageBackground source={require("../images/background.jpeg")} style={styles.backgroundImage}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <View style={styles.container}>
+                <View style={styles.passwordContainer}>
+                  <TextInput style={styles.passwordInput}
+                    placeholder="비밀번호 입력"
+                    onChangeText={(text) => {this.setState({password: text})}}
+                    underlineColorAndroid='transparent'/>
+                  <TouchableOpacity
+                    disabled={this.state.submitBtnDisabled}
+                    style={styles.passwordSubmitBtn}
+                    onPress={() => { this.login(this.state.password) }}>
+                    <Text>Log in</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          </ImageBackground>
+        </KeyboardAvoidingView>
+      );
+    }
+    else {
+      return (<View></View>)
+    }
+  }
 }
 
 const styles = StyleSheet.create({
   backgroundImage: {
     width: '100%',
-    height: '100%',
+    height: '100%'
   },
   container: {
     display: 'flex',
-    width: '100%',
-    height: '100%',
+    flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
   },

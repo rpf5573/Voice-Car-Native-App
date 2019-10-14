@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "android-shake": "adb shell input keyevent 82",
     "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'",
-    "run:release:ios": "react-native run-ios --configuration Release --device iPhone"
+    "run:release:ios": "react-native run-ios --configuration Release --device iPhone",
+    "run:debug:ios": "react-native run-ios --configuration --device iPhone"
   },
   "dependencies": {
     "@types/node": "^12.7.12",
