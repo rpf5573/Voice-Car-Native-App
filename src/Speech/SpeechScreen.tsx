@@ -9,13 +9,16 @@ import {
   Alert
 } from "react-native";
 import {Locale, rapiURL, parts as _parts} from '../constants';
-import { NavigationScreenProps, NavigationParams } from "react-navigation";
+import { NavigationStackScreenProps } from 'react-navigation-stack';
 import Voice from "react-native-voice";
 import Spell from "./Spell";
 import axios from "axios";
 import { Part, Parts, Spell as SpellType } from "../@types/index";
 import RecordButton from './RecordButton';
 
+type Props = {
+  navigation: NavigationStackScreenProps<{team: number, part: Part}>
+}
 type States = {
   active: boolean;
   error: string;
@@ -23,8 +26,8 @@ type States = {
   partialResults: string[];
   matchedSpellCode: number;
 };
-export default class SpeechScreen extends Component<NavigationScreenProps<NavigationParams>,States> {
-  constructor(props: NavigationScreenProps) {
+export default class SpeechScreen extends Component<Props,States> {
+  constructor(props: Props) {
     super(props);
     Voice.onSpeechStart = this.onSpeechStart
     Voice.onSpeechEnd = this.onSpeechEnd
@@ -34,10 +37,8 @@ export default class SpeechScreen extends Component<NavigationScreenProps<Naviga
     this.sendCommand = this.sendCommand.bind(this);
     this.getMatchedSpell = this.getMatchedSpell.bind(this);
   }
-  // team: number = this.props.navigation.getParam("team");
-  // part: Part = this.props.navigation.getParam("part");
-  team: number = 1;
-  part: Part = _parts.BOTTOM;
+  team: number = this.props.navigation.navigation.getParam("team");
+  part: Part = this.props.navigation.navigation.getParam("part");
   state = {
     active: false,
     error: "",

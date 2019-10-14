@@ -1,15 +1,18 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, ImageBackground, Alert} from 'react-native';
-import {NavigationScreenProps, NavigationParams} from "react-navigation";
+import { NavigationStackScreenProps } from 'react-navigation-stack';
 import {parts, ROUTES} from '../constants';
 import PartBox from './PartBox';
 import {Part, Parts} from '../@types/index';
 
+type Props = {
+  navigation: NavigationStackScreenProps<{team: number, rcUsageState: number}>
+}
 type States = {
   part: Part | null
 }
-export default class PartSelectScreen extends Component<NavigationScreenProps<NavigationParams>, States> {
-  constructor(props: NavigationScreenProps) {
+export default class PartSelectScreen extends Component<Props, States> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       part: null
@@ -22,9 +25,9 @@ export default class PartSelectScreen extends Component<NavigationScreenProps<Na
     title: '몸체 설정'
   }
   moveToSpeechScreen(part: Part) {
-    let team: number = this.props.navigation.getParam('team');
+    let team: number = this.props.navigation.navigation.getParam('team');
     if ( team > 0 ) {
-      this.props.navigation.push(ROUTES.SpeechScreen, {
+      this.props.navigation.navigation.push(ROUTES.SpeechScreen, {
         part,
         team
       });
@@ -33,9 +36,9 @@ export default class PartSelectScreen extends Component<NavigationScreenProps<Na
     }
   }
   moveToRCScreen(part: Part) {
-    let team: number = this.props.navigation.getParam('team');
+    let team: number = this.props.navigation.navigation.getParam('team');
     if ( team > 0 ) {
-      this.props.navigation.push(ROUTES.RemoteControllerScreen, {
+      this.props.navigation.navigation.push(ROUTES.RemoteControllerScreen, {
         part,
         team
       });
@@ -44,7 +47,7 @@ export default class PartSelectScreen extends Component<NavigationScreenProps<Na
     }
   }
   renderPartBoxes(parts: Parts) {
-    let rcUsageState = this.props.navigation.getParam('rcUsageState');
+    let rcUsageState = this.props.navigation.navigation.getParam('rcUsageState');
     let moveToControllerScreen = rcUsageState ? this.moveToRCScreen : this.moveToSpeechScreen;
     let partBoxes = []
     partBoxes.push(<PartBox key="hand" moveToControllerScreen={moveToControllerScreen} part={parts.HAND} image={require('../images/hand.png')}></PartBox>);

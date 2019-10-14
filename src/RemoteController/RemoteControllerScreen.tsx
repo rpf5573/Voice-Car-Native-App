@@ -7,20 +7,23 @@ import {
   ImageBackground,
   Dimensions
 } from "react-native";
-import { NavigationScreenProps, NavigationParams } from "react-navigation";
 import Hexagon from "./Hexagon";
 import { RemoteBtnType, parts, rapiURL, serverURL } from '../constants';
 import { HexagonBtnProps, Part, SpellOnRemote } from "../@types";
 import axios from "axios";
 import { number } from 'prop-types';
+import { NavigationStackScreenProps } from 'react-navigation-stack';
 
+type Props = {
+  navigation: NavigationStackScreenProps<{team: number, part: Part}>
+}
 type States = {
   activeBtnNumber: number|undefined,
   commandRightBefore: string|undefined,
   sendingCommand: boolean
 };
-export default class RemoteControllerScreen extends Component<NavigationScreenProps<NavigationParams>,States> {
-  constructor(props: NavigationScreenProps) {
+export default class RemoteControllerScreen extends React.Component<Props, States> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       activeBtnNumber: undefined,
@@ -105,12 +108,11 @@ export default class RemoteControllerScreen extends Component<NavigationScreenPr
       });
     }
   }
-  team: number = this.props.navigation.getParam("team");
-  part: Part = this.props.navigation.getParam("part");
+  team: number = this.props.navigation.navigation.getParam("team");
+  part: Part = this.props.navigation.navigation.getParam("part");
   elements: any[] = []
   sendCommand = (btnNumber:number, code: number, speed: number, isStop: boolean) => {
     var url = `${rapiURL(this.team)}/${code}/${speed}`;
-    console.log("url", url);
     axios(url).then((response) => {
       if (response.status == 201) {
         if (response.data.error) {
@@ -133,6 +135,7 @@ export default class RemoteControllerScreen extends Component<NavigationScreenPr
         // Alert.alert("ERROR", "통신 에러");
       }
     }).catch((err) => {
+      console.log('err in remote controller', err);
       this.setState({
         activeBtnNumber: undefined,
         sendingCommand: false
@@ -141,8 +144,6 @@ export default class RemoteControllerScreen extends Component<NavigationScreenPr
     });
   }
   handleClickBtn = (btnNumber: number, code: number, speed: number) => {
-    console.log("code", code);
-    console.log("speed", speed);
     // 현재 명령을 보내고 있는지 체크
     if ( ! this.state.sendingCommand ) {
 

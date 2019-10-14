@@ -1,18 +1,21 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, ImageBackground, Text, TextInput, Button, TouchableOpacity, KeyboardAvoidingView, Alert} from 'react-native';
-import {NavigationScreenProps, NavigationParams} from "react-navigation";
+import { NavigationStackScreenProps } from 'react-navigation-stack';
 import {serverURL, rapiURL, ROUTES, parts} from '../constants';
 import axios from "axios";
 import {AxiosRequestConfig} from "axios";
 
+type Props = {
+  navigation: NavigationStackScreenProps<{team: number}>
+}
 type States = {
   password: string,
   submitBtnDisabled: boolean,
   rcUsageState: boolean|null
 }
 
-export default class EntranceScreen extends Component<NavigationScreenProps<NavigationParams>, States> {
-  constructor(props: NavigationScreenProps) {
+export default class EntranceScreen extends Component<Props, States> {
+  constructor(props: Props) {
     super(props);
     this.moveToPartSelectScreen = this.moveToPartSelectScreen.bind(this);
     this.login = this.login.bind(this);
@@ -46,7 +49,7 @@ export default class EntranceScreen extends Component<NavigationScreenProps<Navi
     });
   }
   moveToPartSelectScreen(team: number, rcUsageState: boolean) {
-    this.props.navigation.push(ROUTES.PartSelectScreen, { team, rcUsageState });
+    this.props.navigation.navigation.push(ROUTES.PartSelectScreen, { team, rcUsageState });
   }
   login(password: string) {
     if (password == "testmode1") {

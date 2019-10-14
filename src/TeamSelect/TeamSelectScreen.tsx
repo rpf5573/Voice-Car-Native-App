@@ -1,14 +1,17 @@
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {NavigationScreenProps, NavigationParams} from "react-navigation";
+import { NavigationStackScreenProps } from 'react-navigation-stack';
 import TeamBox from './TeamBox';
 import {teamColors, ROUTES} from '../constants';
 
+type Props = {
+  navigation: NavigationStackScreenProps<{team: number}>
+}
 type States = {
   teamCount: number
 }
-export default class TeamSelectScreen extends Component<NavigationScreenProps<NavigationParams>, States> {
-  constructor(props: NavigationScreenProps) {
+export default class TeamSelectScreen extends Component<Props, States> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       teamCount: 5,
@@ -16,7 +19,7 @@ export default class TeamSelectScreen extends Component<NavigationScreenProps<Na
     this.moveToPartSelectScreen = this.moveToPartSelectScreen.bind(this);
   }
   moveToPartSelectScreen() {
-    this.props.navigation.push(ROUTES.PartSelectScreen)
+    this.props.navigation.navigation.push(ROUTES.PartSelectScreen)
   }
   renderTeamBoxes(teamCount: number) {
     let teamBoxes = [];
