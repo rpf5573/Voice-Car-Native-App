@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, ImageBackground, Text, TextInput, Button, TouchableOpacity, KeyboardAvoidingView, Alert, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import {StyleSheet, View, ImageBackground, Text, TextInput, Button, TouchableOpacity, KeyboardAvoidingView, Alert, TouchableWithoutFeedback, Keyboard, Platform} from 'react-native';
 import { NavigationStackScreenProps } from 'react-navigation-stack';
 import {serverURL, rapiURL, ROUTES, parts} from '../constants';
 import axios from "axios";
@@ -192,7 +192,7 @@ export default class EntranceScreen extends Component<Props, States> {
   render() {
     if ( this.state.rcUsageState != null ) {
       return (
-        <KeyboardAvoidingView behavior="padding" enabled>
+        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} enabled>
           <ImageBackground source={require("../images/background.jpeg")} style={styles.backgroundImage}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
               <View style={styles.container}>

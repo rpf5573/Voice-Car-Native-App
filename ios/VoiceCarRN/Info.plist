@@ -22,6 +22,8 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -31,6 +33,8 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Location 정보 사용하것습니더</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>사용자 핸드폰의 마이크기능이 필요합니다</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>음성인식을 사용하겠습니다</string>
 	<key>UILaunchStoryboardName</key>

@@ -76,7 +76,7 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    entryFile: "index.tsx",
+    entryFile: "index.js",
     enableHermes: false,  // clean and rebuild if changing
 ]
 
@@ -131,8 +131,8 @@ android {
         applicationId "com.voicecarrn"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 6
-        versionName "4.2"
+        versionCode 7
+        versionName "4.3"
     }
     splits {
         abi {
@@ -180,7 +180,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation "com.facebook.react:react-native:0.61.2"  // From node_modules
 
     // for react-native-screens error
     implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
