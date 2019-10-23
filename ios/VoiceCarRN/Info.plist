@@ -32,11 +32,11 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Location 정보 사용하것습니더</string>
+	<string>We need location feature</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>사용자 핸드폰의 마이크기능이 필요합니다</string>
+	<string>We need microphone feature to send command to car server</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>음성인식을 사용하겠습니다</string>
+	<string>We need speech recognition feature to send command to car server</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>

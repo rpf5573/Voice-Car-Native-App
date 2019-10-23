@@ -10,19 +10,19 @@ import Svg, {
   Path,
   Image
 } from 'react-native-svg';
-import { RemoteBtnType } from '../constants';
-import { HexagonBtnProps } from "../@types/index";
+import { RemoteBtnTypeEnum } from '../constants';
+import { RemoteBtnProps } from "../@types/index";
 
 type States = {}
-export default class Hexagon extends Component<HexagonBtnProps, States> {
-  constructor(props: HexagonBtnProps) {
+export default class Hexagon extends Component<RemoteBtnProps, States> {
+  constructor(props: RemoteBtnProps) {
     super(props);
   }
   render() {
-    if ( this.props.type == RemoteBtnType.Empty ) {
+    if ( this.props.type == RemoteBtnTypeEnum.Empty ) {
       return (<View style={styles.empty}></View>)
     }
-    if ( this.props.type == RemoteBtnType.Text ) {
+    if ( this.props.type == RemoteBtnTypeEnum.Text ) {
       var opacity = '1.0';
       if ( ! this.props.code ) {
         opacity = '0.3';
@@ -55,7 +55,7 @@ export default class Hexagon extends Component<HexagonBtnProps, States> {
         </Svg>
       )
     }
-    if ( this.props.type == RemoteBtnType.PlaceHoldImage ) {
+    if ( this.props.type == RemoteBtnTypeEnum.PlaceHoldImage ) {
       return (
         <Svg width="100%" height="100%" viewBox="0 0 120 100">
           <Path

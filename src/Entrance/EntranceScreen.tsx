@@ -32,7 +32,7 @@ export default class EntranceScreen extends Component<Props, States> {
           Alert.alert(response.data.error);
           return;
         }
-        response.data.speechTestMode = false;
+        response.data.speechTestMode = true;
         if ( ! response.data.speechTestMode ) {
           this.resetSimilarSpells();
         }

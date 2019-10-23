@@ -8,10 +8,9 @@ import {
   Dimensions
 } from "react-native";
 import Hexagon from "./Hexagon";
-import { RemoteBtnType, parts, rapiURL, serverURL } from '../constants';
-import { HexagonBtnProps, Part, SpellOnRemote } from "../@types";
+import { parts, rapiURL, RemoteBtnTypeEnum } from '../constants';
+import { Part, RemoteBtnProps } from "../@types";
 import axios from "axios";
-import { number } from 'prop-types';
 import { NavigationStackScreenProps } from 'react-navigation-stack';
 
 type Props = NavigationStackScreenProps<{team: number, part: Part}>
@@ -29,12 +28,12 @@ export default class RemoteControllerScreen extends React.Component<Props, State
       sendingCommand: false
     }
     this.elements = [
-      {type: RemoteBtnType.Empty}, {type: RemoteBtnType.PlaceHoldImage} , {type: RemoteBtnType.Empty},
-      {type: RemoteBtnType.Text, text: "펴"}, {type: RemoteBtnType.PlaceHoldImage}, {type: RemoteBtnType.Text, text: "접어"},
-      {type: RemoteBtnType.Text, text: "들어"}, {type: RemoteBtnType.PlaceHoldImage}, {type: RemoteBtnType.Text, text: "내려"},
-      {type: RemoteBtnType.Empty}, {type: RemoteBtnType.Text, text: "빠르게"}, {type: RemoteBtnType.Empty},
-      {type: RemoteBtnType.Text, text: "왼쪽"}, {type: RemoteBtnType.Text, text: "앞으로"}, {type: RemoteBtnType.Text, text: "오른쪽"},
-      {type: RemoteBtnType.PlaceHoldImage}, {type: RemoteBtnType.Text, text: "뒤로"}, {type: RemoteBtnType.PlaceHoldImage}
+      {type: RemoteBtnTypeEnum.Empty}, {type: RemoteBtnTypeEnum.PlaceHoldImage} , {type: RemoteBtnTypeEnum.Empty},
+      {type: RemoteBtnTypeEnum.Text, text: "펴"}, {type: RemoteBtnTypeEnum.PlaceHoldImage}, {type: RemoteBtnTypeEnum.Text, text: "접어"},
+      {type: RemoteBtnTypeEnum.Text, text: "들어"}, {type: RemoteBtnTypeEnum.PlaceHoldImage}, {type: RemoteBtnTypeEnum.Text, text: "내려"},
+      {type: RemoteBtnTypeEnum.Empty}, {type: RemoteBtnTypeEnum.Text, text: "빠르게"}, {type: RemoteBtnTypeEnum.Empty},
+      {type: RemoteBtnTypeEnum.Text, text: "왼쪽"}, {type: RemoteBtnTypeEnum.Text, text: "앞으로"}, {type: RemoteBtnTypeEnum.Text, text: "오른쪽"},
+      {type: RemoteBtnTypeEnum.PlaceHoldImage}, {type: RemoteBtnTypeEnum.Text, text: "뒤로"}, {type: RemoteBtnTypeEnum.PlaceHoldImage}
     ]
     if ( this.part == parts.ARM ) {
       this.part.spells.forEach(part => {
@@ -138,7 +137,7 @@ export default class RemoteControllerScreen extends React.Component<Props, State
         activeBtnNumber: undefined,
         sendingCommand: false
       });
-      Alert.alert("ERROR", "포크봇이 켜져있는지 확인해주세요");
+      Alert.alert("ERROR", "통신 에러");
     });
   }
   handleClickBtn = (btnNumber: number, code: number, speed: number) => {

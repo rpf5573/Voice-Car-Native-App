@@ -6,15 +6,18 @@ import {
   View,
   Image,
   TouchableWithoutFeedback,
-  Alert
+  Alert,
+  ImageBackground,
+  Dimensions
 } from "react-native";
-import {Locale, rapiURL, parts as _parts} from '../constants';
+import {Locale, rapiURL, parts, SpeechBtnTypeEnum} from '../constants';
 import { NavigationStackScreenProps } from 'react-navigation-stack';
 import Voice from "react-native-voice";
-import Spell from "./Spell";
+import SpellMenuItem from "./SpellMenuItem";
 import axios from "axios";
-import { Part, Parts, Spell as SpellType } from "../@types/index";
+import { Part, Spell } from "../@types/index";
 import RecordButton from './RecordButton';
+import { isObject } from "util";
 
 type Props = NavigationStackScreenProps<{team: number, part: Part}>
 type States = {
@@ -25,16 +28,6 @@ type States = {
   matchedSpellCode: number;
 };
 export default class SpeechScreen extends Component<Props,States> {
-  constructor(props: Props) {
-    super(props);
-    Voice.onSpeechStart = this.onSpeechStart
-    Voice.onSpeechEnd = this.onSpeechEnd
-    Voice.onSpeechError = this.onSpeechError
-    Voice.onSpeechResults = this.onSpeechResults
-    this.renderSpells = this.renderSpells.bind(this);
-    this.sendCommand = this.sendCommand.bind(this);
-    this.getMatchedSpell = this.getMatchedSpell.bind(this);
-  }
   team: number = this.props.navigation.getParam("team");
   part: Part = this.props.navigation.getParam("part");
   state = {
@@ -47,21 +40,48 @@ export default class SpeechScreen extends Component<Props,States> {
   static navigationOptions = {
     title: "음성인식"
   };
+  elements: any[] = []
+
+  constructor(props: Props) {
+    super(props);
+    Voice.onSpeechStart = this.onSpeechStart
+    Voice.onSpeechEnd = this.onSpeechEnd
+    Voice.onSpeechError = this.onSpeechError
+    Voice.onSpeechResults = this.onSpeechResults
+    this.sendCommand = this.sendCommand.bind(this);
+    this.getMatchedSpell = this.getMatchedSpell.bind(this);
+
+    let spells = this.part.spells
+    console.log(spells);
+    this.elements = [
+      {type: SpeechBtnTypeEnum.Empty}, {type: SpeechBtnTypeEnum.Empty} , {type: SpeechBtnTypeEnum.Empty},
+      {type: SpeechBtnTypeEnum.Empty}, {type: SpeechBtnTypeEnum.Empty}, {type: SpeechBtnTypeEnum.Empty},
+    ]
+    if ( this.part == parts.ARM ) {
+      Object.assign(this.elements[0], {type: SpeechBtnTypeEnum.Text, word: spells[0].main, code: spells[0].code});
+      Object.assign(this.elements[2], {type: SpeechBtnTypeEnum.Text, word: spells[1].main, code: spells[1].code});
+      Object.assign(this.elements[3], {type: SpeechBtnTypeEnum.Text, word: spells[2].main, code: spells[2].code});
+      Object.assign(this.elements[5], {type: SpeechBtnTypeEnum.Text, word: spells[3].main, code: spells[3].code});
+    }
+    else if ( this.part == parts.BOTTOM ) {
+      Object.assign(this.elements[0], {type: SpeechBtnTypeEnum.Text, word: spells[2].main, code: spells[2].code});
+      Object.assign(this.elements[1], {type: SpeechBtnTypeEnum.Text, word: spells[4].main, code: spells[4].code});
+      Object.assign(this.elements[2], {type: SpeechBtnTypeEnum.Text, word: spells[3].main, code: spells[3].code});
+      Object.assign(this.elements[3], {type: SpeechBtnTypeEnum.Text, word: spells[0].main, code: spells[0].code});
+      Object.assign(this.elements[5], {type: SpeechBtnTypeEnum.Text, word: spells[1].main, code: spells[1].code});
+    }
+    else if ( this.part == parts.HAND ) {
+      Object.assign(this.elements[0], {type: SpeechBtnTypeEnum.Text, word: spells[0].main, code: spells[0].code});
+      Object.assign(this.elements[2], {type: SpeechBtnTypeEnum.Text, word: spells[1].main, code: spells[1].code});
+    }
+    else if ( this.part == parts.WAIST ) {
+      Object.assign(this.elements[0], {type: SpeechBtnTypeEnum.Text, word: spells[0].main, code: spells[0].code});
+      Object.assign(this.elements[2], {type: SpeechBtnTypeEnum.Text, word: spells[1].main, code: spells[1].code});
+    }
+    console.log(this.elements);
+  }
 
   // render
-  renderSpells(part: Part) {
-    let spells: JSX.Element[] = [];
-    part.spells.forEach((spell, index) => {
-      let isMatched = false;
-      if (this.state.matchedSpellCode == spell.code) {
-        isMatched = true;
-      }
-      spells.push(
-        <Spell key={spell.main + index} spell={spell} isMatched={isMatched} />
-      );
-    });
-    return spells;
-  }
   render() {
     let btn = (
       <TouchableWithoutFeedback onPress={this.startRecognizing}>
@@ -71,7 +91,6 @@ export default class SpeechScreen extends Component<Props,States> {
         />
       </TouchableWithoutFeedback>
     );
-    let middleStyle: any[] = [styles.middle];
     if (this.state.active) {
       btn = (
         <TouchableWithoutFeedback onPress={this.stopRecognizing}>
@@ -83,43 +102,62 @@ export default class SpeechScreen extends Component<Props,States> {
       );
     }
     return (
-      <View style={styles.container}>
-        <View style={styles.top}>
-          <Text style={styles.title}>{this.part.korean} 명령어 목록</Text>
-          <View style={styles.spellContainer}>
-            {this.renderSpells(this.part)}
+      <ImageBackground source={require("../images/default-background.jpeg")} style={styles.full}>
+        <View style={styles.container}>
+          <View style={styles.top}>
+            <Text style={styles.title}>Voice Control View</Text>
+            <View style={styles.spellMenuContainer}>
+              {this.renderSpellMenuItems(this.elements)}
+            </View>
+          </View>
+          <View style={styles.middle}>
+            <View style={styles.resultTextContainer}>
+              <View style={styles.resultOverlay}></View>
+              <Text style={styles.resultText}>{this.state.result}</Text>
+            </View>
+          </View>
+          <View style={styles.bottom}>
+            {btn}
+            {false && <RecordButton style={styles.recordButton} part={this.part}></RecordButton>}
+          </View>
+          <View style={styles.allStopBtnContainer}>
+            <TouchableWithoutFeedback onPress={() => {
+              this.stopRecognizing();
+              this.sendCommand(this.part.stop.code, 10, () => {
+                this.setState({
+                  active: false,
+                  result: '',
+                  matchedSpellCode: 0
+                });
+              })}}>
+              <Text style={styles.allStopBtn}>중지</Text>
+            </TouchableWithoutFeedback>
           </View>
         </View>
-        <View style={middleStyle}>
-          <Text key='result-1' style={styles.result}>
-            {this.state.result}
-          </Text>
-        </View>
-        <View style={styles.bottom}>
-          {btn}
-          <RecordButton style={styles.recordButton} part={this.part}></RecordButton>
-        </View>
-        <View style={styles.allStopBtnContainer}>
-          <TouchableWithoutFeedback onPress={() => {
-            this.stopRecognizing();
-            this.sendCommand(this.part.stop.code, () => {
-              this.setState({
-                active: false,
-                result: '',
-                matchedSpellCode: 0
-              });
-            })}}>
-            <Text style={styles.allStopBtn}>중지</Text>
-          </TouchableWithoutFeedback>
-        </View>
-      </View>
+      </ImageBackground>
     );
+  }
+  renderSpellMenuItems = (elements: any[]) => {
+    let spellMenuItmes: JSX.Element[] = [];
+    for ( const [index, el] of elements.entries() ) {
+      let isMatched = false;
+      if ( this.state.matchedSpellCode ==  el.code) {
+        isMatched = true;
+      }
+      spellMenuItmes.push(
+        <View style={styles.spellMenuItemWrapper}>
+          <SpellMenuItem type={el.type} key={el.word + index} word={el.word} isMatched={isMatched} />
+        </View>
+      )
+    }
+    return spellMenuItmes;
   }
 
   // custom function
-  sendCommand(code: number|undefined, callback: () => void) {
+  sendCommand(code: number, speed: number, callback: () => void) {
     callback();
-    let url: string = `${rapiURL(this.team)}/${code}`;
+    let url: string = `${rapiURL(this.team)}/${code}/${speed}`;
+    console.log('url', url);
     axios(url).then((response) => {
       if ( response.status == 201 ) {
       } else {
@@ -128,21 +166,22 @@ export default class SpeechScreen extends Component<Props,States> {
       Alert.alert("ERROR", "통신에러");
     });
   }
-  getMatchedSpell(spell: string): { code?: number, command?: string } {
-    let matchedSpellCode = undefined;
-    let matchedCommand = undefined;
-    spell = spell.replace(/\s/g, "");
-    this.part.spells.forEach((i: SpellType) => {
+  getMatchedSpell(spellWord: string): { code: number, speed: number } {
+    let matchedSpellCode = 0;
+    let speed = 0;
+    spellWord = spellWord.replace(/\s/g, "");
+    console.log('spell', spellWord);
+    this.part.spells.forEach((i: Spell) => {
       i.similar.forEach((z: string) => {
-        if (z == spell) {
+        if (z == spellWord) {
           matchedSpellCode = i.code;
-          matchedCommand = i.command;
+          speed = i.speed;
         }
       });
     });
     return {
       code: matchedSpellCode,
-      command: matchedCommand
+      speed: speed
     }
   }
 
@@ -156,6 +195,8 @@ export default class SpeechScreen extends Component<Props,States> {
     // eslint-disable-next-line
     console.log("onSpeechStart: ", e)
   };
+
+  // ios 를 위한 처리
   onSpeechEnd = (e: Voice.EndEvent) => {
     console.log("onSpeechEnd");
     // eslint-disable-next-line
@@ -166,12 +207,20 @@ export default class SpeechScreen extends Component<Props,States> {
     if ( this.state.result == '' ) { return; }
 
     let result = this.getMatchedSpell(this.state.result);
-    this.sendCommand(result.code!, () => {
+    console.log('result in speech end', result);
+    if ( result.code > 0 ) {
+      this.sendCommand(result.code, result.speed, () => {
+        this.setState({
+          active: false,
+          matchedSpellCode: 0
+        });
+      });
+    } else {
       this.setState({
         active: false,
-        matchedSpellCode: result.code!
+        result: ''
       });
-    });
+    }
   };
   onSpeechError = (e: Voice.ErrorEvent) => {
     console.log(e);
@@ -180,6 +229,8 @@ export default class SpeechScreen extends Component<Props,States> {
       active: false
     });
   };
+
+  // android 를 위한 처리
   onSpeechResults = (e: Voice.Results) => {
     const val: string = e.value[0];
     console.log(`onSpeechResults - val : ${val}`);
@@ -190,12 +241,21 @@ export default class SpeechScreen extends Component<Props,States> {
       if ( this.state.result == '' ) { return; }
 
       let result = this.getMatchedSpell(this.state.result);
-      this.sendCommand(result.code!, () => {
+      console.log('result', result);
+      if ( result.code > 0 ) {
+        this.sendCommand(result.code, result.speed, () => {
+          this.setState({
+            active: false,
+            matchedSpellCode: 0
+          });
+        });
+      } else {
+        console.log('nothing matched');
         this.setState({
           active: false,
-          matchedSpellCode: result.code!
+          result: ''
         });
-      });
+      }
     });
   };
   startRecognizing = async () => {
@@ -240,7 +300,14 @@ export default class SpeechScreen extends Component<Props,States> {
   };
 }
 
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+const windowRatio = Number((windowHeight/windowWidth).toFixed(2));
 const styles = StyleSheet.create({
+  full: {
+    width: '100%',
+    height: '100%'
+  },
   button: {
     width: 75,
     height: 75
@@ -250,34 +317,60 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     justifyContent: "space-between",
     paddingBottom: 80,
-    position: 'relative'
+    position: 'relative',
+    paddingLeft: '6%',
+    paddingRight: '6%',
   },
-  spellContainer: {
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginLeft: 10,
-    marginRight: 10
+  spellMenuContainer: {
+    width: (windowRatio < 1.9 ? '60%' : '80%'),
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignContent: 'center'
+  },
+  spellMenuItemWrapper: {
+    width: '33.33%',
+    aspectRatio: 1.2
   },
   title: {
-    fontSize: 34,
-    textAlign: "center",
-    marginBottom: 30
+    textAlign: 'center',
+    fontSize: 32,
+    color: 'white',
+    marginBottom: 40
   },
-  top: {},
+  top: {
+    width: '100%',
+    alignItems: 'center',
+  },
   middle: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-    backgroundColor: "#f2f4f7",
-    padding: 10
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  resultOverlay: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    backgroundColor: 'white',
+    opacity: 0.3,
+    borderRadius: 20
   },
   dFlex: {
     display: "flex"
   },
-  result: {
+  resultTextContainer: {
+    width: '60%',
+    height: 50,
+    alignItems: 'center',
+    position: 'relative',
+    justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  resultText: {
+    textAlign: 'center',
     fontSize: 30,
-    color: 'black'
+    color: 'black',
   },
   bottom: {
     display: "flex",

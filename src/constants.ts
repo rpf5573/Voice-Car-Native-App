@@ -51,14 +51,14 @@ const parts: Parts = {
         main: '펴',
         similar: ['펴','표', '8', '피라고', '피라고', '표', '벽', '효', '벼'],
         code: 21,
-        speed: 80,
+        speed: 60,
         command: 'motor-5/forward/45'
       },
       {
         main: '접어',
         similar: ['접어', '저붜', '자보', '저봐', '줘봐', '줘바', '접포', '초밥', '여보', '초보', '터보', '초봉', '서버', '더워'],
         code: 22,
-        speed: 80,
+        speed: 60,
         command: 'motor-5/backward/45'
       },
       {
@@ -72,7 +72,7 @@ const parts: Parts = {
         main: '내려',
         similar: ['내려', '내려와', '매력', '노력', '매려', '노려', '느려', '재료', '의료'],
         code: 24,
-        speed: 80,
+        speed: 60,
         command: 'motor-2/forward/45'
       },
     ],
@@ -89,14 +89,14 @@ const parts: Parts = {
         main: '왼쪽',
         similar: ['왼쪽', '외쪽'],
         code: 31,
-        speed: 50,
+        speed: 30,
         command: 'motor-1/forward/60'
       },
       {
         main: '오른쪽',
         similar: ['오른쪽', '어른쪽', '어느쪽'],
         code: 32,
-        speed: 50,
+        speed: 30,
         command: 'motor-1/backward/60'
       }
     ],
@@ -113,29 +113,29 @@ const parts: Parts = {
         main: '앞으로',
         similar: ['앞으로', '아프로', '아브로', '어그로', '바보'],
         code: 41,
-        speed: 80, // 99가 max다 !! 100은 아니되옵니다~
+        speed: 60, // 99가 max다 !! 100은 아니되옵니다~
         command: 'bottom/forward/100'
       },
       {
         main: '뒤로',
         similar: ['뒤로', '기록', '귀로', '1호', '위로'],
         code: 42,
-        speed: 99,
+        speed: 60,
         command: 'bottom/backward/100'
       },
       {
         main: '왼쪽',
         similar: ['왼쪽'],
         code: 43,
-        speed: 50,
-        command: 'bottom/left/100'
+        speed: 40,
+        command: 'bottom/left/70'
       },
       {
         main: '오른쪽',
         similar: ['오른쪽', '어른쪽', '어느쪽'],
         code: 44,
-        speed: 50,
-        command: 'bottom/right/100'
+        speed: 40,
+        command: 'bottom/right/70'
       },
       {
         main: '빠르게',
@@ -166,7 +166,7 @@ const rapiURL = (team: number) => {
   return `http://voice-car-0${team}.jp.ngrok.io`;
 }
 const serverURL = 'http://voice-car.club';
-// const serverURL = 'http://localhost:8080';
+const localURL = 'http://localhost:8080';
 
 enum ROUTES {
   EntranceScreen = "EntranceScreen",
@@ -175,8 +175,11 @@ enum ROUTES {
   RemoteControllerScreen = "RemoteControllerScreen",
   TestScreen = "TestScreen"
 }
-
-enum RemoteBtnType {
+enum SpeechBtnTypeEnum {
+  Empty = 'empty',
+  Text = 'text'
+}
+enum RemoteBtnTypeEnum {
   Empty = 'empty',
   Text = 'text',
   PlaceHoldImage = 'placeholdimage'
@@ -189,5 +192,6 @@ export {
   rapiURL,
   serverURL,
   ROUTES,
-  RemoteBtnType
+  RemoteBtnTypeEnum,
+  SpeechBtnTypeEnum
 }

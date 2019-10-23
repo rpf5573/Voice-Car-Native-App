@@ -131,8 +131,8 @@ android {
         applicationId "com.voicecarrn"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 7
-        versionName "4.3"
+        versionCode 9
+        versionName "4.5"
     }
     splits {
         abi {
