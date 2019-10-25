@@ -24,8 +24,8 @@ const parts: Parts = {
     korean: '손',
     spells: [
       {
-        main: '펴',
-        similar: ['펴', '표', '피라고', '벽', '효'],
+        main: '손펴',
+        similar: ['손펴', '손표', '손피라고', '손벽', '손효', '성표'],
         code: 11,
         speed: 80,
         command: 'motor-6/forward/45'
@@ -48,8 +48,8 @@ const parts: Parts = {
     korean: '팔',
     spells: [
       {
-        main: '펴',
-        similar: ['펴','표', '8', '피라고', '피라고', '표', '벽', '효', '벼'],
+        main: '팔펴',
+        similar: ['팔펴','팔표', '팔피라고', '팔표', '팔벽', '팔효', '팔벼', '발표', '발펴'],
         code: 21,
         speed: 60,
         command: 'motor-5/forward/45'
@@ -175,11 +175,16 @@ enum ROUTES {
   RemoteControllerScreen = "RemoteControllerScreen",
   TestScreen = "TestScreen"
 }
-enum SpeechBtnTypeEnum {
+enum HaxagonViewType {
+  Empty = 'empty',
+  Text = 'text',
+  Image = 'image'
+}
+enum SpeechSpellMenuItemType {
   Empty = 'empty',
   Text = 'text'
 }
-enum RemoteBtnTypeEnum {
+enum RemoteBtnType {
   Empty = 'empty',
   Text = 'text',
   PlaceHoldImage = 'placeholdimage'
@@ -192,6 +197,7 @@ export {
   rapiURL,
   serverURL,
   ROUTES,
-  RemoteBtnTypeEnum,
-  SpeechBtnTypeEnum
+  HaxagonViewType,
+  RemoteBtnType,
+  SpeechSpellMenuItemType
 }

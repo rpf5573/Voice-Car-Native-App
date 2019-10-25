@@ -1,4 +1,4 @@
-import {SpeechBtnTypeEnum, RemoteBtnTypeEnum} from '../constants';
+import {SpeechSpellMenuItemType, RemoteBtnType} from '../constants';
 
 type Spell = {
   main: string,
@@ -34,8 +34,8 @@ type DirBtn = {
   direction: string,
   comment: string
 }
-type RemoteBtnProps = {
-  type: RemoteBtnTypeEnum,
+type RemoteControlBtnProps = {
+  type: RemoteBtnType,
   btnNumber: number,
   text?: string,
   code?: number,
@@ -51,5 +51,5 @@ export {
   Parts,
   InitialAppState,
   DirBtn,
-  RemoteBtnProps
+  RemoteControlBtnProps
 }

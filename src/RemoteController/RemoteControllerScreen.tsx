@@ -7,9 +7,9 @@ import {
   ImageBackground,
   Dimensions
 } from "react-native";
-import Hexagon from "./Hexagon";
-import { parts, rapiURL, RemoteBtnTypeEnum } from '../constants';
-import { Part, RemoteBtnProps } from "../@types";
+import Hexagon from "./RemoteControlBtn";
+import { parts, rapiURL, RemoteBtnType } from '../constants';
+import { Part, RemoteControlBtnProps } from "../@types";
 import axios from "axios";
 import { NavigationStackScreenProps } from 'react-navigation-stack';
 
@@ -28,14 +28,15 @@ export default class RemoteControllerScreen extends React.Component<Props, State
       sendingCommand: false
     }
     this.elements = [
-      {type: RemoteBtnTypeEnum.Empty}, {type: RemoteBtnTypeEnum.PlaceHoldImage} , {type: RemoteBtnTypeEnum.Empty},
-      {type: RemoteBtnTypeEnum.Text, text: "펴"}, {type: RemoteBtnTypeEnum.PlaceHoldImage}, {type: RemoteBtnTypeEnum.Text, text: "접어"},
-      {type: RemoteBtnTypeEnum.Text, text: "들어"}, {type: RemoteBtnTypeEnum.PlaceHoldImage}, {type: RemoteBtnTypeEnum.Text, text: "내려"},
-      {type: RemoteBtnTypeEnum.Empty}, {type: RemoteBtnTypeEnum.Text, text: "빠르게"}, {type: RemoteBtnTypeEnum.Empty},
-      {type: RemoteBtnTypeEnum.Text, text: "왼쪽"}, {type: RemoteBtnTypeEnum.Text, text: "앞으로"}, {type: RemoteBtnTypeEnum.Text, text: "오른쪽"},
-      {type: RemoteBtnTypeEnum.PlaceHoldImage}, {type: RemoteBtnTypeEnum.Text, text: "뒤로"}, {type: RemoteBtnTypeEnum.PlaceHoldImage}
+      {type: RemoteBtnType.Empty}, {type: RemoteBtnType.PlaceHoldImage} , {type: RemoteBtnType.Empty},
+      {type: RemoteBtnType.Text, text: "펴"}, {type: RemoteBtnType.PlaceHoldImage}, {type: RemoteBtnType.Text, text: "접어"},
+      {type: RemoteBtnType.Text, text: "들어"}, {type: RemoteBtnType.PlaceHoldImage}, {type: RemoteBtnType.Text, text: "내려"},
+      {type: RemoteBtnType.Empty}, {type: RemoteBtnType.Text, text: "빠르게"}, {type: RemoteBtnType.Empty},
+      {type: RemoteBtnType.Text, text: "왼쪽"}, {type: RemoteBtnType.Text, text: "앞으로"}, {type: RemoteBtnType.Text, text: "오른쪽"},
+      {type: RemoteBtnType.PlaceHoldImage}, {type: RemoteBtnType.Text, text: "뒤로"}, {type: RemoteBtnType.PlaceHoldImage}
     ]
     if ( this.part == parts.ARM ) {
+      this.elements[3].text = '팔펴'; // part.main에는 팔펴가 들어있을거거든!
       this.part.spells.forEach(part => {
         if ( this.elements[3].text == part.main ) {
           this.elements[3].code = part.code;
@@ -82,6 +83,7 @@ export default class RemoteControllerScreen extends React.Component<Props, State
         }
       });
     } else if ( this.part == parts.HAND ) {
+      this.elements[3].text = '손펴';
       this.part.spells.forEach(part => {
         if ( this.elements[3].text == part.main ) {
           this.elements[3].code = part.code;
@@ -195,7 +197,9 @@ const styles = StyleSheet.create({
     height: '100%'
   },
   title: {
+    textAlign: 'center',
     fontSize: 32,
+    fontWeight: "700",
     color: 'white',
     marginBottom: 15
   },
