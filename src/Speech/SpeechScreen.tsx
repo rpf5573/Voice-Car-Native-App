@@ -83,6 +83,7 @@ export default class SpeechScreen extends Component<Props,States> {
 
   // render
   render() {
+    console.log(this.state.result);
     const weakRed = '#E74C3C';
     let recordBtn = (
       <RecordBtn onPress={this.startRecognizing} style={styles.haxagonBtn} backgroundColor={weakRed}></RecordBtn>
@@ -124,8 +125,8 @@ export default class SpeechScreen extends Component<Props,States> {
         isMatched = true;
       }
       spellMenuItmes.push(
-        <View style={styles.spellMenuItemWrapper}>
-          <SpeechSpellMenuItem key={el.word + index} type={el.type} strokeColor={isMatched ? "blue" : "gold"} word={el.word} />
+        <View key={index} style={styles.spellMenuItemWrapper}>
+          <SpeechSpellMenuItem type={el.type} strokeColor={isMatched ? "blue" : "gold"} word={el.word} />
         </View>
       )
     }
@@ -136,7 +137,7 @@ export default class SpeechScreen extends Component<Props,States> {
   sendCommand = (code: number, speed: number, callback: () => void) => {
     callback();
     let url: string = `${rapiURL(this.team)}/${code}/${speed}`;
-    console.log('url', url);
+    console.log('url in sendCommand', url);
     axios(url).then((response) => {
       if ( response.status == 201 ) {
       } else {
@@ -184,10 +185,12 @@ export default class SpeechScreen extends Component<Props,States> {
     // android는 end -> result순서로 호출되기 때문에 다르게 지정해줘야한다
     if ( Platform.OS != 'ios' ) { return; }
     if ( this.state.result == '' ) { return; }
+    console.log("Platfor.OS is iOS in onSpeechEnd");
 
     let result = this.getMatchedSpell(this.state.result);
-    console.log('result in speech end', result);
+    console.log('result in onSpeechEnd', result);
     if ( result.code > 0 ) {
+      console.log("sendCommand in onSpeechEnd");
       this.sendCommand(result.code, result.speed, () => {
         this.setState({
           active: false,
@@ -197,7 +200,6 @@ export default class SpeechScreen extends Component<Props,States> {
     } else {
       this.setState({
         active: false,
-        result: ''
       });
     }
   };
@@ -211,17 +213,20 @@ export default class SpeechScreen extends Component<Props,States> {
 
   // android 를 위한 처리
   onSpeechResults = (e: Voice.Results) => {
+    console.log('onSpeechResults');
     const val: string = e.value[0];
-    console.log(`onSpeechResults - val : ${val}`);
     this.setState({
       result: val
     }, () => {
+      console.log("after setState in onSpeechResult");
       if ( Platform.OS != 'android' ) { return; }
       if ( this.state.result == '' ) { return; }
+      console.log("Platform.OS is Android");
 
       let result = this.getMatchedSpell(this.state.result);
-      console.log('result', result);
+      console.log('result in onSpeechResult', result);
       if ( result.code > 0 ) {
+        console.log("before sendCommand in onSpeechResult");
         this.sendCommand(result.code, result.speed, () => {
           this.setState({
             active: false,
@@ -232,7 +237,6 @@ export default class SpeechScreen extends Component<Props,States> {
         console.log('nothing matched');
         this.setState({
           active: false,
-          result: ''
         });
       }
     });
@@ -252,6 +256,7 @@ export default class SpeechScreen extends Component<Props,States> {
     }
   };
   stopRecognizing = async () => {
+    console.log("stopRecognizing is called");
     try {
       await Voice.stop();
     } catch (e) {

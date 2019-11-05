@@ -31,8 +31,8 @@ const parts: Parts = {
         command: 'motor-6/forward/45'
       },
       {
-        main: '접어',
-        similar: ['접어', '저붜', '자보', '저봐', '줘봐', '줘바', '접포', '초밥', '여보', '초보', '터보', '초봉', '서버', '더워', '저도', '초복'],
+        main: '잡아',
+        similar: ['자바'],
         code: 12,
         speed: 80,
         command: 'motor-6/backward/45'
