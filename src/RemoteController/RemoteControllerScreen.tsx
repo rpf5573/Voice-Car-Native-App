@@ -84,6 +84,7 @@ export default class RemoteControllerScreen extends React.Component<Props, State
       });
     } else if ( this.part == parts.HAND ) {
       this.elements[3].text = '손펴';
+      this.elements[5].text = '잡아';
       this.part.spells.forEach(part => {
         if ( this.elements[3].text == part.main ) {
           this.elements[3].code = part.code;
