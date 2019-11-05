@@ -39,7 +39,7 @@ export default class EntranceScreen extends Component<Props, States> {
         let rcUsageState = parseInt(response.data.rcUsageState) ? true : false;
         this.setState({rcUsageState});
       } else {
-        Alert.alert("ERROR", "통신 에러");
+        Alert.alert("ERROR", "서버에 문제가 있습니다");
       }
     }).catch((err) => {
       console.log(err);
@@ -81,7 +81,7 @@ export default class EntranceScreen extends Component<Props, States> {
         }
         this.moveToPartSelectScreen(response.data.team, this.state.rcUsageState!);
       } else {
-        Alert.alert("ERROR", "통신 에러");
+        Alert.alert("ERROR", "서버에 문제가 있습니다");
       }
     }).catch((err) => {
       console.log(err);

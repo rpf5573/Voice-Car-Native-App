@@ -90,7 +90,7 @@ export default class SpeechScreen extends Component<Props,States> {
     );
     if (this.state.active) {
       recordBtn = (
-        <RecordBtn onPress={this.stopRecognizing} style={styles.haxagonBtn} backgroundColor='blue'></RecordBtn>
+        <RecordBtn onPress={(Platform.OS == 'ios' ? this.cancelRecognizing : this.stopRecognizing)} style={styles.haxagonBtn} backgroundColor='blue'></RecordBtn>
       );
     }
     return (
@@ -170,39 +170,42 @@ export default class SpeechScreen extends Component<Props,States> {
     Voice.destroy().then(Voice.removeAllListeners);
   }
 
+  onCancelRecognition = () => {
+    if ( Platform.OS != 'ios' ) { return }
+    this.setState({
+      active: false
+    }, () => {
+      let result = this.getMatchedSpell(this.state.result);
+      console.log("result - onCancelRecognition", result);
+      if ( result.code > 0 ) {
+        this.sendCommand(result.code, result.speed, () => {
+          this.setState({
+            active: false,
+            matchedSpellCode: 0
+          });
+        });
+      } else {
+        console.log('nothing matched');
+        this.setState({
+          active: false,
+        });
+      }
+    });
+  }
+
   // voice recognition functions
   onSpeechStart = (e: Voice.StartEvent) => {
     // eslint-disable-next-line
     console.log("onSpeechStart: ", e)
   };
 
-  // ios 를 위한 처리
   onSpeechEnd = (e: Voice.EndEvent) => {
     console.log("onSpeechEnd");
-    // eslint-disable-next-line
+    this.setState({
+      active: false
+    });
+  }
 
-    // ios는 result -> end순서로 호출되고,
-    // android는 end -> result순서로 호출되기 때문에 다르게 지정해줘야한다
-    if ( Platform.OS != 'ios' ) { return; }
-    if ( this.state.result == '' ) { return; }
-    console.log("Platfor.OS is iOS in onSpeechEnd");
-
-    let result = this.getMatchedSpell(this.state.result);
-    console.log('result in onSpeechEnd', result);
-    if ( result.code > 0 ) {
-      console.log("sendCommand in onSpeechEnd");
-      this.sendCommand(result.code, result.speed, () => {
-        this.setState({
-          active: false,
-          matchedSpellCode: 0
-        });
-      });
-    } else {
-      this.setState({
-        active: false,
-      });
-    }
-  };
   onSpeechError = (e: Voice.ErrorEvent) => {
     console.log(e);
     this.setState({
@@ -211,22 +214,19 @@ export default class SpeechScreen extends Component<Props,States> {
     });
   };
 
-  // android 를 위한 처리
   onSpeechResults = (e: Voice.Results) => {
     console.log('onSpeechResults');
     const val: string = e.value[0];
+    console.log(val);
     this.setState({
-      result: val
+      result: val,
     }, () => {
-      console.log("after setState in onSpeechResult");
-      if ( Platform.OS != 'android' ) { return; }
-      if ( this.state.result == '' ) { return; }
-      console.log("Platform.OS is Android");
-
+      // 안드로이드만 onSpeechResults에서 서버로 명령을 보낸다
+      // 왜냐하면, 안드로이드는 지가 알아서 음성인식이 꺼지기 때문이다
+      if ( Platform.OS != 'android' ) { return false }
       let result = this.getMatchedSpell(this.state.result);
-      console.log('result in onSpeechResult', result);
+      console.log("result", result);
       if ( result.code > 0 ) {
-        console.log("before sendCommand in onSpeechResult");
         this.sendCommand(result.code, result.speed, () => {
           this.setState({
             active: false,
@@ -259,14 +259,18 @@ export default class SpeechScreen extends Component<Props,States> {
     console.log("stopRecognizing is called");
     try {
       await Voice.stop();
+      console.log('after Voice Stop');
     } catch (e) {
       console.error(e);
     }
   };
   cancelRecognizing = async () => {
+    console.log("cancelRecognizing");
     try {
       await Voice.cancel();
+      this.onCancelRecognition();
     } catch (e) {
+      console.log('error in cancelREcogizing');
       console.error(e);
     }
   };

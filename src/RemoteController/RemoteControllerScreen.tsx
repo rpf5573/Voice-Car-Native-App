@@ -139,7 +139,7 @@ export default class RemoteControllerScreen extends React.Component<Props, State
         activeBtnNumber: undefined,
         sendingCommand: false
       });
-      Alert.alert("ERROR", "통신 에러");
+      Alert.alert("ERROR", "배터리 방전 / 알수없는 오류");
     });
   }
   handleClickBtn = (btnNumber: number, code: number, speed: number) => {

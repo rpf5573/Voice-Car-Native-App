@@ -25,14 +25,14 @@ const parts: Parts = {
     spells: [
       {
         main: '손펴',
-        similar: ['손펴', '손표', '손피라고', '손벽', '손효', '성표'],
+        similar: ['손펴', '손표', '손피라고', '손벽', '손효', '성표', '송평'],
         code: 11,
         speed: 80,
         command: 'motor-6/forward/45'
       },
       {
         main: '잡아',
-        similar: ['자바'],
+        similar: ['자바', '저봐', '자봐', '차바','잡아라', '자바라'],
         code: 12,
         speed: 80,
         command: 'motor-6/backward/45'
